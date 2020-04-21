@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module>
 	<!-- MOD 4535992 -->
-    <!-- <inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />-->
+    <!-- -->
     <!-- <inherits name="org.vaadin.artur.icepush.IcepushaddonWidgetset" /> -->  
     <!-- END MOD 4535992 -->
     
@@ -24,4 +24,6 @@
     <inherits name="org.icepush.gwt.ICEpush" />
     <!-- adding support for icepush -->
     <!-- <script src="icepush.js"></script> -->
+
+    <inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
 </module>

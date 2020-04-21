@@ -6,6 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.11.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	
 	<groupId>com.github.alexdp</groupId>
@@ -16,7 +17,8 @@
 	<description>Integration between Vaadin 7 and Activiti 5</description>
 	
 	<properties>
- 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -25,8 +27,8 @@
 		
 		<!-- PROJECT PROPERTIES -->
 		<activiti.version>5.23.0</activiti.version><!-- 5.19,5.7 -->
-        <vaadin.core.version>14.0.2</vaadin.core.version>
-        <vaadin.plugin.version>14.0.2</vaadin.plugin.version>
+        <vaadin.core.version>2.0.0</vaadin.core.version>
+        <vaadin.plugin.version>7.7.17</vaadin.plugin.version>
         <vaadin.version>7.7.17</vaadin.version><!-- 7.4.4,6.7.0 -->
         <vaadin.addons.icepush.version>0.5.6</vaadin.addons.icepush.version><!--0.2.1-->
         <!--<spring.version>3.0.3.RELEASE</spring.version>-->
@@ -52,7 +54,12 @@
 				<version>${vaadin.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>			
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+            	<artifactId>spring-boot-starter-logging</artifactId>
+            	<version>2.1.11.RELEASE</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -84,105 +91,174 @@
 		<!-- =================== -->
 		<!-- SPRING BOOT -->
 		<!-- =================== -->	
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-autoconfigure</artifactId>		   
+		</dependency>
+
 			
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+	            	<groupId>org.springframework.boot</groupId>
+  					<artifactId>spring-boot-autoconfigure</artifactId>
+	            </exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<!--
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-instrument-tomcat</artifactId>		
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<scope>compile</scope>
 			<exclusions>
+				<!--
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
+				-->
+				<!--
+	            <exclusion>
+	                <groupId>org.springframework</groupId>
+	                <artifactId>spring-webmvc</artifactId>
+	            </exclusion>
+	            -->
 			</exclusions>
+			
 		</dependency>
+		<!--
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-devtools</artifactId>
+		    <optional>true</optional>
+		</dependency>
+		-->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+		<!-- BUG https://stackoverflow.com/questions/13233631/java-lang-arraystoreexception-sun-reflect-annotation-typenotpresentexceptionpro -->
+		<!--
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-web-services</artifactId>
+		    <scope>compile</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <scope>compile</scope>
+        </dependency>	
+        -->
+        <dependency>
+		    <groupId>commons-configuration</groupId>
+		    <artifactId>commons-configuration</artifactId>
+		    <version>1.10</version>
+		    <scope>compile</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-configuration2</artifactId>
+		    <version>2.7</version>
+		    <scope>compile</scope>
+		</dependency>			
 		<!-- =================== -->
-		<!-- VAADIN -->
+		<!-- VAADIN-SPRINGBOOT-->
 		<!-- =================== -->
-	
+		<!--
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-spring-boot</artifactId>
 			<version>3.2.1</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+  					<artifactId>spring-boot</artifactId>
+				</exclusion>
+				<exclusion>
+	                <groupId>org.springframework</groupId>
+	                <artifactId>spring-webmvc</artifactId>
+	            </exclusion>
+	            <exclusion>
+	            	<groupId>org.springframework</groupId>
+  					<artifactId>spring-websocket</artifactId>
+	            </exclusion>
+	            <exclusion>
+	            	<groupId>org.springframework.boot</groupId>
+  					<artifactId>spring-boot-autoconfigure</artifactId>
+	            </exclusion>
+			</exclusions>
 		</dependency>			
-
+		-->
         <dependency>
 		    <groupId>com.vaadin</groupId>
 		    <artifactId>vaadin-spring-boot-starter</artifactId>
 		    <version>${vaadin.core.version}</version>
 		    <scope>compile</scope>
-		</dependency>   
- 		<dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin</artifactId>
-            <version>${vaadin.core.version}</version>
-            <scope>compile</scope>
-        </dependency>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>org.springframework.boot</groupId>
+  					<artifactId>spring-boot-starter-web</artifactId>
+		    	</exclusion>
+	            <exclusion>
+	            	<groupId>org.springframework.boot</groupId>
+  					<artifactId>spring-boot-autoconfigure</artifactId>
+	            </exclusion>		    	
+		    </exclusions>
+		</dependency> 
 
+		<!-- =================== -->
+		<!-- VAADIN -->
+		<!-- =================== -->
+		
 		<!-- The core server part of Vaadin -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<!-- The core client part of Vaadin -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>compile</scope>
 		</dependency>		
 		<!-- The default Vaadin themes -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>compile</scope>
 		</dependency> 	
 		<!-- Precompiled DefaultWidgetSet -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiled</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>compile</scope>
 		</dependency>	
 		<!-- Compiler for custom widget sets. Should not be deployed -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-client-compiler</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<!-- ???????? -->
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-push</artifactId>
-			<version>${vaadin.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		
@@ -214,6 +290,7 @@
             <version>0.6.2</version>
             <scope>compile</scope>
         </dependency>
+        <!-- NOT EXISTS ANYMORE -->
         <!--
         <dependency>
             <groupId>org.vaadin</groupId>
@@ -283,19 +360,33 @@
 			<artifactId>gson</artifactId>
 			<scope>compile</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala-library</artifactId>
 			<version>2.10.4</version>
 			<scope>compile</scope>
 		</dependency>
+		-->
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.5</version>
+            <version>0.9.11</version>
             <scope>compile</scope>
+            <exclusions>
+            	<exclusion>
+             	  <groupId>com.google.guava</groupId>
+ 				  <artifactId>guava</artifactId>           	
+            	</exclusion>
+            </exclusions>
         </dependency>
-
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>23.0</version>
+		    <scope>compile</scope>
+		</dependency>
+		
 		<!-- ================ -->
 		<!-- Spring -->
 		<!-- ================ -->
@@ -349,7 +440,7 @@
 		<!-- ================ -->
 		<!-- Logging -->
 		<!-- ================ -->
-	
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -360,20 +451,15 @@
 			<artifactId>slf4j-jcl</artifactId>
 			<scope>compile</scope>
 		</dependency>  
-     					
+     			
 		<!-- ================ -->
 		<!-- DATABASE -->
 		<!-- ================ -->
-
+		<!--
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -388,11 +474,17 @@
 			<version>2.0.3</version>
 			<scope>compile</scope>
 		</dependency>
-	
+		-->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+				
 		<!-- ================ -->
 		<!-- Validation -->
 		<!-- ================ -->
-		
+		<!--
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
@@ -404,7 +496,13 @@
 			<artifactId>validation-api</artifactId>
 			<scope>compile</scope>
 		</dependency>
-
+		-->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-validation</artifactId>
+		    <!--<version>2.0.3.RELEASE</version>-->
+		    <scope>compile</scope>
+		</dependency> 
 		<!-- ================ -->
 		<!-- Testing -->
 		<!-- ================ -->
@@ -430,20 +528,13 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<attachClasses>true</attachClasses>
+        			<classesClassifier>classes</classesClassifier>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<!--
-				<dependencies>
-					<dependency>
-						<groupId>org.springframework</groupId>
-						<artifactId>springloaded</artifactId>
-						<version>1.2.0.RELEASE</version>
-					</dependency>
-				</dependencies>
-				-->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -451,8 +542,27 @@
 				<configuration>
 					<source>${maven.compiler.source}</source>
 					<target>${maven.compiler.target}</target>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                    <!-- TODO using for genereting annotaion processing in genereted source-->
+                    <!--
+                    <compilerArguments> 
+                        <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
+                    </compilerArguments>
+                    -->			
 				</configuration>
 			</plugin>
+            <!-- As we are doing "inplace" GWT compilation, ensure the widgetset -->
+            <!-- directory is cleaned properly -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/webapp/VAADIN/widgetsets</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>			
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -460,24 +570,70 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <!--
+	        <!--
+	            Takes care of synchronizing java
+	            dependencies and imports in package.json and
+	            main.js files. It also creates
+	            webpack.config.js if does not exist yet.
+	            https://vaadin.com/docs/flow/spring/tutorial-spring-basic.html
+	            https://vaadin.com/forum/thread/17459112/build-fails-after-upgrading-from-vaadin-7-8
+	        -->        
  			<plugin>
 				<groupId>com.vaadin</groupId>
 				<artifactId>vaadin-maven-plugin</artifactId>
 				<version>${vaadin.plugin.version}</version>
 				<executions>
 					<execution>
+                        <configuration>
+                            <!-- if you don't specify any modules, the plugin will find them -->
+                            <!-- <modules> <module>com.vaadin.demo.mobilemail.gwt.ColorPickerWidgetSet</module> 
+                            </modules> -->
+                        </configuration>
 						<goals>
-							<goal>update-theme</goal>
-							<goal>update-widgetset</goal>
-							<goal>compile</goal>
-							Comment out compile-theme goal to use on-the-fly theme compilation
-							<goal>compile-theme</goal>
+                            <goal>clean</goal>
+                            <goal>resources</goal>
+                            <goal>update-widgetset</goal>
+                            <goal>compile</goal>
+                            <goal>update-theme</goal>
+                            <goal>compile-theme</goal>
+<!-- 							<goal>prepare-frontend</goal> -->
+<!--                         	<goal>build-frontend</goal> -->
 						</goals>
 					</execution>
 				</executions>
+ 				<configuration>
+                    <extraJvmArgs>-Xmx2048m -Xms512M</extraJvmArgs>
+                    <!-- <runTarget>mobilemail</runTarget> -->
+                    <!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This 
+                    way compatible with Vaadin eclipse plugin. -->
+                    <webappDirectory>${project.basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
+                    <hostedWebapp>${webappDirectory}</hostedWebapp>
+                    <noServer>true</noServer>
+                    <!-- Remove draftCompile when project is ready -->
+                    <draftCompile>false</draftCompile>
+                    <compileReport>true</compileReport>
+                    <style>OBF</style>
+                    <strict>false</strict> <!-- This has to be false in order for carousel addon to work -->
+<!--                     <runTarget>http://localhost:8585/</runTarget> -->
+                    <persistentunitcachedir>${project.basedir}/target/cache</persistentunitcachedir>
+                    <deploy>${project.basedir}/target/temp</deploy>
+                </configuration>				
 			</plugin> 
-			-->   
+			<!--
+	         <plugin>
+	             <groupId>com.vaadin</groupId>
+	             <artifactId>flow-maven-plugin</artifactId>
+	             <version>3.0.6</version>
+	             <executions>
+	                 <execution>
+	                     <goals>
+	                         <goal>prepare-frontend</goal>
+	                         <goal>build-frontend</goal>
+	                     </goals>
+	                 </execution>
+	             </executions>
+	         </plugin>
+	         -->
 			<!--                   
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -520,7 +676,7 @@
 				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
 					documentation at codehaus.org -->
 				<configuration>
-					<webappDirectory>src/main/webapp/VAADIN/widgetsets</webappDirectory>
+					<webappDirectory>${project.basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
 					<!-- <style>PRETTY</style> -->
 					<extraJvmArgs>-Xmx2048m -Xms512M</extraJvmArgs>
 					<!--<runTarget>index.jsp</runTarget>-->

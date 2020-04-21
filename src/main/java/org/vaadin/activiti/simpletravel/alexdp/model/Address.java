@@ -4,14 +4,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.vaadin.activiti.simpletravel.domain.AbstractEntity;
+
 @Entity
-public class Address {
+public class Address extends AbstractEntity {
 
-	@Id
-	@GeneratedValue
-	private Long id;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8046000038553626918L;
 	
+//	@Id
+//	@GeneratedValue
+//	private Long id;
+
 	private String street;
 	private String zipcode;
 	private String country;

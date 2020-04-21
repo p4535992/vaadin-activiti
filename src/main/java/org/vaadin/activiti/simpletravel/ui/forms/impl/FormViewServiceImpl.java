@@ -26,8 +26,9 @@ import org.vaadin.activiti.simpletravel.ui.forms.TaskFormView;
 public class FormViewServiceImpl implements FormViewService {
     
     private Reflections reflections;
-    
-    private String[] packagesToScan;
+    //MOD 4535992
+    //private String[] packagesToScan;
+    private String[]  packagesToScan = new String[]{"org.vaadin.activiti.simpletravel.process.ui"};
     
     private final Logger logger = LoggerFactory.getLogger(getClass());    
     

@@ -1,0 +1,40 @@
+package org.vaadin.activiti.simpletravel.servlet;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+@WebServlet(
+		name = "VaadinApplicationServlet",
+		displayName = "Activiti and Vaadin - A Match made in heaven",
+//        initParams =
+//        {
+//            @WebInitParam(name = "application", value = "org.vaadin.activiti.simpletravel.ui.SimpleTravelApplication"),
+//            @WebInitParam(name = "widgetset", value = "org.vaadin.activiti.simpletravel.ui.SimpleTravelWidgetset")
+//        },
+		urlPatterns = "/*", 
+		loadOnStartup = 1)
+public class VaadinApplicationServlet extends org.vaadin.artur.icepush.ICEPushServlet{
+
+	private static final transient Logger logger = LoggerFactory.getLogger(VaadinApplicationServlet.class);
+	
+	
+	/**
+	 * @href https://stackoverflow.com/questions/51874785/gwt-spring-boot-autowired-is-not-working
+	 */
+    @Override
+    public void init() throws ServletException {
+         super.init();
+         getServletContext().setInitParameter("application", "org.vaadin.activiti.simpletravel.ui.SimpleTravelApplication");
+         getServletContext().setInitParameter("widgetset", "org.vaadin.activiti.simpletravel.ui.SimpleTravelWidgetset");
+         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+    }
+
+}

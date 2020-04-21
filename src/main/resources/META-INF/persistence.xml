@@ -7,8 +7,8 @@
         <class>org.vaadin.activiti.simpletravel.domain.TravelInvoiceDecision</class>
         <class>org.vaadin.activiti.simpletravel.domain.TravelRequest</class>
         <class>org.vaadin.activiti.simpletravel.domain.TravelRequestDecision</class>
-        <class>org.vaadin.activiti.simpletravel.model.Address</class>
-        <class>org.vaadin.activiti.simpletravel.model.Applicant</class>
+        <class>org.vaadin.activiti.simpletravel.alexdp.model.Address</class>
+        <class>org.vaadin.activiti.simpletravel.alexdp.model.Applicant</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <!-- We handle validation manually in the service layer -->
         <validation-mode>NONE</validation-mode>

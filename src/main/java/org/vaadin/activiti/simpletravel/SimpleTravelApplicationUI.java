@@ -11,13 +11,16 @@ import org.vaadin.activiti.simpletravel.ui.MainWindow;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.spring.annotation.SpringViewDisplay;
 import com.vaadin.ui.UI;
 /**
+ * @href https://examples.javacodegeeks.com/enterprise-java/vaadin/vaadin-spring-example/
  * @href https://github.com/dominic-simplan/vaadin-widgetset/blob/master/test-ui/src/main/java/com/example/test/MyUI.java
  */
 @SpringUI
+@SpringViewDisplay
 @Theme("reindeer")
-@Configurable
+//@Configurable
 public class SimpleTravelApplicationUI extends UI{ //MOD 4535992 extends Application implements TransactionListener {
 
     @Autowired
@@ -29,7 +32,7 @@ public class SimpleTravelApplicationUI extends UI{ //MOD 4535992 extends Applica
 		setContent(new LoginPanel());
 		//TODO understand why launch exception
 		//setTheme("simpletravel");
-		addWindow(new MainWindow());
+		//addWindow(new MainWindow());
 	}
 
 	//MOD 4535992

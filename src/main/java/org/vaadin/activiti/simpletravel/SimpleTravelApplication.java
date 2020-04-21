@@ -16,7 +16,9 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -24,9 +26,10 @@ import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@ServletComponentScan
 @SpringBootApplication
-@EnableSpringConfigured
-@EnableTransactionManagement
+//@EnableSpringConfigured
+//@EnableTransactionManagement
 //@ImportResource({
 //    //"classpath:application-context-process.xml", 
 //    //"classpath:application-context-ui.xml"
@@ -43,13 +46,17 @@ public class SimpleTravelApplication  implements InitializingBean { //extends Sp
     }
     
 	public static void main(String[] args) {
-		//MOD 4535992
-		//SpringApplication.run(MyApp.class, args);
-		SpringApplication app = new SpringApplication(SimpleTravelApplication.class);
-        app.setBannerMode(Banner.Mode.OFF);
-
-        Environment env = app.run(args).getEnvironment();
-        logApplicationStartup(env);
+		try {
+			//MOD 4535992
+			//SpringApplication.run(MyApp.class, args);
+			SpringApplication app = new SpringApplication(SimpleTravelApplication.class);
+	        app.setBannerMode(Banner.Mode.OFF);
+	
+	        Environment env = app.run(args).getEnvironment();
+	        logApplicationStartup(env);
+		}catch(Throwable ex) {
+			ex.printStackTrace();
+		}
     }
 
     private static void logApplicationStartup(Environment env) {

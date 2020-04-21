@@ -10,13 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import org.vaadin.activiti.simpletravel.alexdp.util.vaadin.WorkflowFormLayout.TextAreaField;
+import org.vaadin.activiti.simpletravel.domain.AbstractEntity;
 
 @Entity
-public class Applicant {
+public class Applicant extends AbstractEntity {
 
-	@Id
-	@GeneratedValue
-	private Long id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6716966757695362747L;
+//	@Id
+//	@GeneratedValue
+//	private Long id;
+
 
 	private String firstname;
 	private String lastname;
