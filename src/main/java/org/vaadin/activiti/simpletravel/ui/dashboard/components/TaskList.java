@@ -40,7 +40,8 @@ public abstract class TaskList extends Panel {
 
     protected void updateComponent() {
         if (getTasks() == null || getTasks().isEmpty()) {
-            removeAllComponents();
+            //MOD 4535992
+        	//removeAllComponents();
             taskComponents.clear();
         } else {
             VerticalLayout layout = (VerticalLayout) getContent();

@@ -2,7 +2,7 @@ package org.vaadin.activiti.simpletravel.domain.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.vaadin.activiti.simpletravel.domain.TravelRequest;
 
 public class ReturnsAfterDepartureValidator implements ConstraintValidator<ReturnsAfterDeparture, TravelRequest> {

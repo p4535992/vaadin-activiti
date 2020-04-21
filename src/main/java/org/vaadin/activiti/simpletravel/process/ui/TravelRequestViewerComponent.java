@@ -6,7 +6,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import org.apache.commons.lang.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.vaadin.activiti.simpletravel.domain.TravelRequest;
 
 public class TravelRequestViewerComponent extends CustomComponent {
@@ -20,7 +20,6 @@ public class TravelRequestViewerComponent extends CustomComponent {
     public TravelRequestViewerComponent() {
         layout = new FormLayout();
         setCompositionRoot(layout);
-
         requester = createLabelAndAddToLayout("Requester:", layout);
         time = createLabelAndAddToLayout("Time:", layout);
         destination = createLabelAndAddToLayout("Destination:", layout);

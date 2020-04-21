@@ -10,3 +10,11 @@ Look at ui/WelcomePanel.java which is the dispatcher. It routes Activiti tasks t
 # ActivitiVaadinDevoxx11 (https://github.com/p4535992/ActivitiVaadinDevoxx11)
 
 # jmonkeyengine-vaadin-integration(https://github.com/Kinmarui/jmonkeyengine-vaadin-integration)
+
+# activity-vaadin-crud (https://github.com/attybro/activity-vaadin-crud)
+
+# Vaadin-Activiti-FYP- (https://github.com/Harrumnoor/Vaadin-Activiti-FYP-)
+
+# alfresco-repo (https://github.com/iNFERNUS87/alfresco-repo)
+
+# avuidemo (https://github.com/chasm/avuidemo/)

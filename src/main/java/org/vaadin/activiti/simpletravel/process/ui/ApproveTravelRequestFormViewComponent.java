@@ -1,6 +1,7 @@
 package org.vaadin.activiti.simpletravel.process.ui;
 
-import com.vaadin.terminal.UserError;
+import com.vaadin.server.UserError;
+//import com.vaadin.terminal.UserError;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;

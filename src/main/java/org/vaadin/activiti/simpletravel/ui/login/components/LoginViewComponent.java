@@ -10,7 +10,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window.Notification;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.Reindeer;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.vaadin.activiti.simpletravel.ui.login.LoginPresenter;
@@ -79,7 +79,12 @@ public class LoginViewComponent extends AbstractViewComponent<LoginView, LoginPr
 
     @Override
     public void showLoginFailed() {
-        viewLayout.getWindow().showNotification(
+    	//MOD 4535992
+        //viewLayout.getWindow().showNotification(
+        //        "Login failed. Please try again.",
+        //        Notification.TYPE_HUMANIZED_MESSAGE);
+        
+        Notification.show(
                 "Login failed. Please try again.",
                 Notification.TYPE_HUMANIZED_MESSAGE);
     }

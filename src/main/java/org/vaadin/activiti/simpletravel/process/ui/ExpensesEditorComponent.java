@@ -43,7 +43,11 @@ public class ExpensesEditorComponent extends ExpensesViewerComponent {
             }
         });
         form.setLayout(formLayout);
-        form.setWriteThrough(true);
+        
+        //MOD 4535992
+        //form.setWriteThrough(true);
+        form.setReadOnly(false);
+        //END MOD 4535992
         form.setValidationVisible(true);
         form.setImmediate(true);
         

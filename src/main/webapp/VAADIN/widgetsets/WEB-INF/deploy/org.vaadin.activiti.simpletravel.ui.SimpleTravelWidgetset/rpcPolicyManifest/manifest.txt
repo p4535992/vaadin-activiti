@@ -1,2 +1,3 @@
 # Module org.vaadin.activiti.simpletravel.ui.SimpleTravelWidgetset
 # RPC service class, partial path of RPC policy file
+com.google.gwt.logging.shared.RemoteLoggingService, 61669691A828C81F735601CDD8768888.gwt.rpc

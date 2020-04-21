@@ -10,8 +10,10 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window.Notification;
+
+//import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Reindeer;
 import java.util.Collection;
 import java.util.List;
@@ -43,8 +45,9 @@ public class DashboardViewComponent extends AbstractViewComponent<DashboardView,
         viewLayout.setSizeFull();
         
         pusher = new ICEPush();
-        viewLayout.addComponent(pusher);
-        
+        //MOD 4535992
+        //viewLayout.addComponent(pusher);
+        viewLayout.addComponent(pusher.getUI());
         setSizeFull();
         return viewLayout;
     }
@@ -152,12 +155,16 @@ public class DashboardViewComponent extends AbstractViewComponent<DashboardView,
 
     @Override
     public void showProcessStartedMessage(String processName) {
-        getWindow().showNotification(processName + " started");
+    	//MOD 4535992
+    	//getWindow().showNotification(processName + " started");
+        Notification.show(processName + " started");
     }
 
     @Override
     public void showTaskCompletedMessage(String taskName) {
-        getWindow().showNotification(taskName + " completed");
+    	//MOD 4535992
+    	//getWindow().showNotification(taskName + " completed");
+    	Notification.show(taskName + " completed");
     }    
     
     @Override
@@ -172,22 +179,34 @@ public class DashboardViewComponent extends AbstractViewComponent<DashboardView,
     
     @Override
     public void pushChangesToClient() {
-        if (getApplication() != null) {
+    	//MOD 4535992
+    	//if (getApplication() != null) {
+        //    pusher.push();
+        //}
+        if (pusher.getUI() != null) {
             pusher.push();
-        }
+        }   	
     }
 
     @Override
     public void showNewClaimableTasksMessage() {
-        if (getWindow() != null) {
-            getWindow().showNotification("There are new unassigned tasks", Notification.TYPE_TRAY_NOTIFICATION);
+    	//MOD 4535992
+    	//if (getWindow() != null) {
+        //    getWindow().showNotification("There are new unassigned tasks", Notification.TYPE_TRAY_NOTIFICATION);
+        //}
+        if (getUI() != null) {
+        	Notification.show("There are new unassigned tasks", Notification.TYPE_TRAY_NOTIFICATION);
         }
     }
 
     @Override
     public void showNewTasksMessage() {
-        if (getWindow() != null) {
-            getWindow().showNotification("You have new tasks", Notification.TYPE_TRAY_NOTIFICATION);
+    	//MOD 4535992
+    	//if (getWindow() != null) {
+        //    getWindow().showNotification("You have new tasks", Notification.TYPE_TRAY_NOTIFICATION);
+        //}
+        if (getUI() != null) {
+        	Notification.show("You have new tasks", Notification.TYPE_TRAY_NOTIFICATION);
         }
     }
 

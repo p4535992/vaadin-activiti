@@ -2,6 +2,8 @@ package org.vaadin.activiti.simpletravel.ui;
 
 import com.github.peholmst.mvp4vaadin.ViewEvent;
 import com.github.peholmst.mvp4vaadin.ViewListener;
+import com.vaadin.flow.server.VaadinSession;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
 import org.vaadin.activiti.simpletravel.ui.dashboard.DashboardView;
 import org.vaadin.activiti.simpletravel.ui.dashboard.components.DashboardViewComponent;
@@ -36,13 +38,17 @@ public class MainWindow extends Window implements ViewListener {
     }
 
     private void loginUser(String username) {
-        getApplication().setUser(username);
+    	//MOD 4535992
+    	//getApplication().setUser(username);
+    	VaadinSession.getCurrent().getSession().setAttribute("username", username);
         showDashboardView();
         disposeLoginView();
     }
 
     private void logoutUser() {
-        getApplication().close();
+    	//MOD 4535992
+    	//getApplication().close();
+    	close();
     }
 
     private void showLoginView() {

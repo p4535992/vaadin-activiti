@@ -4,6 +4,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.themes.Reindeer;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.vaadin.activiti.simpletravel.ui.dashboard.DashboardPresenter;
@@ -29,13 +31,14 @@ public class ProcessDefinitionList extends Panel {
     }
 
     private void updateComponent() {
-        removeAllComponents();
-        if (processDefinitions != null) {
-            for (ProcessDefinition pd : processDefinitions) {
-                final Component processComponent = createProcessDefinitionComponent(pd.getName(), pd.getKey());
-                addComponent(processComponent);
-            }
-        }
+    	//MOD 4535992
+        //removeAllComponents();
+        //if (processDefinitions != null) {
+        //    for (ProcessDefinition pd : processDefinitions) {
+        //        final Component processComponent = createProcessDefinitionComponent(pd.getName(), pd.getKey());
+        //        addComponent(processComponent);
+        //    }
+        //}
     }
 
     private Component createProcessDefinitionComponent(final String name, final String processDefinitionKey) {

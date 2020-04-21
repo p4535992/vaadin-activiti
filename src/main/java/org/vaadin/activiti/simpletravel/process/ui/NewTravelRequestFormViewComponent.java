@@ -3,7 +3,8 @@ package org.vaadin.activiti.simpletravel.process.ui;
 import com.vaadin.addon.beanvalidation.BeanValidationForm;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.terminal.UserError;
+import com.vaadin.server.UserError;
+//import com.vaadin.terminal.UserError;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -73,7 +74,10 @@ public class NewTravelRequestFormViewComponent extends StartFormViewComponent<Ne
     private BeanValidationForm<TravelRequest> createForm() {
         final BeanValidationForm<TravelRequest> form = new BeanValidationForm<TravelRequest>(TravelRequest.class);
         form.setLocale(Locale.US);
-        form.setWriteThrough(false);
+        //MOD 4535992
+        //form.setWriteThrough(false);
+        form.setReadOnly(false);
+        //END MOD 4535992
         form.setFormFieldFactory(new TravelRequestFormFieldFactory());
         form.setImmediate(true);
 

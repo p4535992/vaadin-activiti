@@ -1,0 +1,1 @@
+$wnd.org_vaadin_activiti_simpletravel_ui_SimpleTravelWidgetset.runAsyncCallback2("mgb(1676,1,FJe);_.wc=function Npc(){var a;L5d[a=++M5d]=Npc;U9b((!N9b&&(N9b=new Z9b),N9b),(N5d[a]=iVe+'5694',this.a).d);M5d=a-1};K5d(Yh)(2);\n//# sourceURL=org.vaadin.activiti.simpletravel.ui.SimpleTravelWidgetset-2.js\n")
