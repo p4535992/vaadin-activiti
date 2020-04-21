@@ -1,52 +1,153 @@
 package org.vaadin.activiti.simpletravel;
 
-//import com.vaadin.Application;
-//import com.vaadin.service.ApplicationContext.TransactionListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.vaadin.activiti.simpletravel.identity.CurrentUserFactoryBean;
-import org.vaadin.activiti.simpletravel.ui.MainWindow;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.UI;
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.identity.Group;
+import org.activiti.engine.identity.User;
+import org.activiti.spring.SpringProcessEngineConfiguration;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
+import org.springframework.core.env.Environment;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Configurable
-public class SimpleTravelApplication extends UI{ //MOD 4535992 extends Application implements TransactionListener {
+@SpringBootApplication
+@EnableSpringConfigured
+@EnableTransactionManagement
+//@ImportResource({
+//    //"classpath:application-context-process.xml", 
+//    //"classpath:application-context-ui.xml"
+//    "application-context.xml"
+//})
+public class SimpleTravelApplication  implements InitializingBean { //extends SpringBootServletInitializer {
 
-    @Autowired
-    protected transient CurrentUserFactoryBean currentUserFactoryBean;
+    private static final Logger log = LoggerFactory.getLogger(SimpleTravelApplication.class);
 
-	@Override
-	protected void init(VaadinRequest request) {
-      setTheme("simpletravel");
-      addWindow(new MainWindow());		
+    private final Environment env;
+
+    public SimpleTravelApplication(Environment env) {
+        this.env = env;
+    }
+    
+	public static void main(String[] args) {
+		//MOD 4535992
+		//SpringApplication.run(MyApp.class, args);
+		SpringApplication app = new SpringApplication(SimpleTravelApplication.class);
+        app.setBannerMode(Banner.Mode.OFF);
+
+        Environment env = app.run(args).getEnvironment();
+        logApplicationStartup(env);
+    }
+
+    private static void logApplicationStartup(Environment env) {
+        String protocol = "http";
+        if (env.getProperty("server.ssl.key-store") != null) {
+            protocol = "https";
+        }
+        String serverPort = env.getProperty("server.port");
+        String contextPath = env.getProperty("server.servlet.context-path");
+        if (StringUtils.isBlank(contextPath)) {
+            contextPath = "/";
+        }
+        String hostAddress = "localhost";
+        try {
+            hostAddress = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            log.warn("The host name could not be determined, using `localhost` as fallback");
+        }
+        log.info("\n----------------------------------------------------------\n\t" +
+                "Application '{}' is running! Access URLs:\n\t" +
+                "Local: \t\t{}://localhost:{}{}\n\t" +
+                "External: \t{}://{}:{}{}\n\t" +
+                "Profile(s): \t{}\n----------------------------------------------------------",
+            env.getProperty("spring.application.name"),
+            protocol,
+            serverPort,
+            contextPath,
+            protocol,
+            hostAddress,
+            serverPort,
+            contextPath,
+            env.getActiveProfiles());
+    }
+
+//	@Override
+//	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//		return builder.sources(MyApp.class);
+//	}
+
+	@Bean
+	InitializingBean usersAndGroupsInitializer(final IdentityService identityService) {
+		return new InitializingBean() {
+			public void afterPropertiesSet() throws Exception {
+				Group attendees = identityService.newGroup("applicants");
+				identityService.saveGroup(attendees);
+				Group staff = identityService.newGroup("staff");
+				identityService.saveGroup(staff);
+
+				User kermit = identityService.newUser("kermit");
+				identityService.saveUser(kermit);
+				identityService.createMembership("kermit", "applicants");
+
+				User gonzo = identityService.newUser("gonzo");
+				identityService.saveUser(gonzo);
+				identityService.createMembership("gonzo", "staff");
+			}
+		};
 	}
 
-	//MOD 4535992
-//    @Override
-//    public void init() {
-//        setTheme("simpletravel");
-//        getContext().addTransactionListener(this);
-//        setMainWindow(new MainWindow());
-//    }
-//
-//    @Override
-//    public void close() {
-//        setUser(null);
-//        getContext().removeTransactionListener(this);
-//        ((MainWindow) getMainWindow()).destroy();
-//        super.close();
-//    }
-//
-//    @Override
-//    public void transactionStart(Application application, Object transactionData) {
-//        String username = (String) getUser();
-//        currentUserFactoryBean.setCurrentUsername(username);
-//    }
-//
-//    @Override
-//    public void transactionEnd(Application application, Object transactionData) {
-//        currentUserFactoryBean.setCurrentUsername(null);
-//    }
-	//END MOD 4535992
+	@Bean
+	public BeanPostProcessor activitiConfigurer() {
+		return new BeanPostProcessor() {
+			@Override
+			public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+				if (bean instanceof SpringProcessEngineConfiguration) {
+					SpringProcessEngineConfiguration config = (SpringProcessEngineConfiguration) bean;
+					//MOD 4535992
+//					config.setMailServerHost("smtp.gmail.com");
+//					config.setMailServerPort(587);
+//					config.setMailServerUseSSL(false);
+//					config.setMailServerUseTLS(true);
+//					config.setMailServerDefaultFrom("alexandre.de.pellegrin@gmail.com");
+//					config.setMailServerUsername("alexandre.de.pellegrin@gmail.com");
+//					config.setMailServerPassword("xxxxxxx");
+					
+					config.setMailServerHost(env.getProperty("spring.mail.host"));
+					config.setMailServerPort(Integer.parseInt(env.getProperty("spring.mail.port")));
+					config.setMailServerUseSSL(false);
+					config.setMailServerUseTLS(true);
+					config.setMailServerDefaultFrom(env.getProperty("spring.mail.username"));
+					config.setMailServerUsername(env.getProperty("spring.mail.username"));
+					config.setMailServerPassword(env.getProperty("spring.mail.password"));
+				}
+				return bean;
+			}
+
+			@Override
+			public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+				return bean;
+			}
+
+		};
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
