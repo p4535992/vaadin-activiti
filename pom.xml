@@ -449,12 +449,33 @@
 			<artifactId>slf4j-api</artifactId>
 			<scope>compile</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jcl</artifactId>
 			<scope>compile</scope>
 		</dependency>  
-     			
+     	-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		-->
+		<!-- Open CMIS -->
+		<dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-client-impl</artifactId>
+			<version>0.12.0</version><!-- 1.1.0 -->
+			<scope>compile</scope>
+		</dependency>
+			
 		<!-- ================ -->
 		<!-- DATABASE -->
 		<!-- ================ -->
