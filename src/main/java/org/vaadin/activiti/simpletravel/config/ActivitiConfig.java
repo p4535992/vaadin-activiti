@@ -1,5 +1,7 @@
 package org.vaadin.activiti.simpletravel.config;
 
+import java.util.Properties;
+
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -13,14 +15,19 @@ import org.activiti.engine.TaskService;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.hibernate.jpa.AvailableSettings;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
+import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 @Configuration
 public class ActivitiConfig {
@@ -35,9 +42,9 @@ public class ActivitiConfig {
     // application-context-process.xml
     // ============================================
 	
-    @Bean
+    @Bean(destroyMethod = "close")
     @Qualifier("dataSource")
-	public org.apache.commons.dbcp.BasicDataSource dataSource(){
+	public DataSource dataSource(){
 		org.apache.commons.dbcp.BasicDataSource basicDataSource = new BasicDataSource();
 		basicDataSource.setDriverClassName(env.getProperty("spring.datasource.driverClassName"));
 		basicDataSource.setUrl(env.getProperty("spring.datasource.url"));
@@ -73,36 +80,82 @@ public class ActivitiConfig {
 //		jpaTransactionManager.setEntityManagerFactory((EntityManagerFactory) entityManagerFactory());
 //		return jpaTransactionManager;
 //	}
-//
-//	//Exposing the Activiti services as beans
-//    
-//    @Bean
-//    @Qualifier("processEngineConfiguration")
-//    @DependsOn({"dataSource","transactionManager","entityManagerFactory"})
-//    public org.activiti.spring.SpringProcessEngineConfiguration processEngineConfiguration(){
-//    	SpringProcessEngineConfiguration springProcessEngineConfiguration = new SpringProcessEngineConfiguration();
-//    	springProcessEngineConfiguration.setDataSource(dataSource());
-//    	springProcessEngineConfiguration.setTransactionManager(transactionManager());
-//    	springProcessEngineConfiguration.setDatabaseSchemaUpdate("true");
-//    	springProcessEngineConfiguration.setJobExecutorActivate(true);
-//    	//Mail server configuration
-//    	springProcessEngineConfiguration.setMailServerPort(Integer.parseInt(env.getProperty("spring.mail.port")));//9898
-//    	//Hook in JPA
-//    	springProcessEngineConfiguration.setJpaEntityManagerFactory(entityManagerFactory());
-//    	springProcessEngineConfiguration.setJpaHandleTransaction(false);
-//    	springProcessEngineConfiguration.setJpaCloseEntityManager(false);
-//    	return springProcessEngineConfiguration;
-//    	
-//    }
-//    
-//    @Bean
-//    @Qualifier("processEngine")
-//    @DependsOn({"processEngineConfiguration"})
-//    public ProcessEngineFactoryBean processEngine(){
-//    	ProcessEngineFactoryBean processEngineFactoryBean = new ProcessEngineFactoryBean();
-//    	processEngineFactoryBean.setProcessEngineConfiguration(processEngineConfiguration());
-//    	return processEngineFactoryBean;
-//    }
+    
+    // ????????????????????????????????????????
+
+    @Bean
+    @DependsOn({"dataSource"})
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdaptor());
+         entityManagerFactoryBean.setDataSource(dataSource());
+         entityManagerFactoryBean.setJpaDialect(new HibernateJpaDialect());
+         //entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+         entityManagerFactoryBean.setPackagesToScan(new String[] { "org.vaadin.activiti.simpletravel.domain","org.vaadin.activiti.simpletravel.alexdp.model"});             
+         entityManagerFactoryBean.setJpaProperties(jpaHibernateProperties());
+         return entityManagerFactoryBean;
+    	  //return (EntityManagerFactory) this.jpaEntityManagerFactory;
+     }
+    
+    @Bean
+    @Qualifier("transactionManager")
+    //@DependsOn({"entityManagerFactory"})
+    public org.springframework.orm.jpa.JpaTransactionManager transactionManager(){
+    	JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+    	jpaTransactionManager.setEntityManagerFactory(((EntityManagerFactory)entityManagerFactory().getObject()));
+    	return jpaTransactionManager;
+    }
+    
+    private HibernateJpaVendorAdapter vendorAdaptor() {
+    	HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+    	vendorAdapter.setShowSql(true);
+    	vendorAdapter.setDatabasePlatform("org.hibernate.dialect.H2Dialect");
+    	return vendorAdapter;
+    }
+    private Properties jpaHibernateProperties() {
+
+    	Properties properties = new Properties();
+
+//    	properties.put(PROPERTY_NAME_HIBERNATE_MAX_FETCH_DEPTH, env.getProperty(PROPERTY_NAME_HIBERNATE_MAX_FETCH_DEPTH));
+//    	properties.put(PROPERTY_NAME_HIBERNATE_JDBC_FETCH_SIZE, env.getProperty(PROPERTY_NAME_HIBERNATE_JDBC_FETCH_SIZE));
+//    	properties.put(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE, env.getProperty(PROPERTY_NAME_HIBERNATE_JDBC_BATCH_SIZE));
+//    	properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, env.getProperty(PROPERTY_NAME_HIBERNATE_SHOW_SQL));
+    	properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+    	properties.put(AvailableSettings.SCHEMA_GEN_DATABASE_ACTION, "none");
+    	//properties.put(AvailableSettings.USE_CLASS_ENHANCER, "false");      
+    	return properties;       
+    }
+
+	//Exposing the Activiti services as beans
+    
+    @Bean
+    @Qualifier("processEngineConfiguration")
+    //@DependsOn({"dataSource","transactionManager","entityManagerFactory"})
+    public org.activiti.spring.SpringProcessEngineConfiguration processEngineConfiguration(){
+    	SpringProcessEngineConfiguration springProcessEngineConfiguration = new SpringProcessEngineConfiguration();
+    	springProcessEngineConfiguration.setDataSource(dataSource());
+    	springProcessEngineConfiguration.setTransactionManager(transactionManager());
+    	springProcessEngineConfiguration.setDatabaseSchemaUpdate("true");
+    	springProcessEngineConfiguration.setJobExecutorActivate(true);
+    	//Mail server configuration
+    	springProcessEngineConfiguration.setMailServerPort(Integer.parseInt(env.getProperty("spring.mail.port")));//9898
+    	//Hook in JPA
+    	//springProcessEngineConfiguration.setJpaEntityManagerFactory(entityManagerFactory());
+    	springProcessEngineConfiguration.setJpaEntityManagerFactory(((EntityManagerFactory)entityManagerFactory().getObject()));
+    	springProcessEngineConfiguration.setJpaHandleTransaction(false);
+    	springProcessEngineConfiguration.setJpaCloseEntityManager(false);
+    	return springProcessEngineConfiguration;
+    	
+    }
+    
+    @Bean
+    @Qualifier("processEngine")
+    @DependsOn({"processEngineConfiguration"})
+    public ProcessEngineFactoryBean processEngine(){
+    	ProcessEngineFactoryBean processEngineFactoryBean = new ProcessEngineFactoryBean();
+    	processEngineFactoryBean.setProcessEngineConfiguration(processEngineConfiguration());
+    	return processEngineFactoryBean;
+    }
  
     @Bean
     @Qualifier("repositoryService")

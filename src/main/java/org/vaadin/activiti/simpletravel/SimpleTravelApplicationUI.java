@@ -5,10 +5,11 @@ package org.vaadin.activiti.simpletravel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.vaadin.activiti.simpletravel.alexdp.ui.LoginPanel;
-import org.vaadin.activiti.simpletravel.identity.CurrentUserFactoryBean;
-import org.vaadin.activiti.simpletravel.ui.MainWindow;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Viewport;
+import com.vaadin.annotations.Widgetset;
+import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.annotation.SpringViewDisplay;
@@ -20,16 +21,22 @@ import com.vaadin.ui.UI;
 @SpringUI
 @SpringViewDisplay
 @Theme("reindeer")
+@Viewport("user-scalable=no,initial-scale=1.0")
+//@Theme("simpletheme")
+@Widgetset("org.smartlabs.AlfrescoRepoWidgetset")
 //@Configurable
 public class SimpleTravelApplicationUI extends UI{ //MOD 4535992 extends Application implements TransactionListener {
 
-    @Autowired
-    protected transient CurrentUserFactoryBean currentUserFactoryBean;
+//    @Autowired
+//    protected transient CurrentUserFactoryBean currentUserFactoryBean;
 
 	@Override
-	protected void init(VaadinRequest request) {
-		setSizeFull();
-		setContent(new LoginPanel());
+	protected void init(VaadinRequest vaadinRequest) {
+		Responsive.makeResponsive(this);
+		setLocale(vaadinRequest.getLocale());
+		getPage().setTitle("Alfresco Repo Login");
+//		setSizeFull();
+//		setContent(new LoginPanel());
 		//TODO understand why launch exception
 		//setTheme("simpletravel");
 		//addWindow(new MainWindow());

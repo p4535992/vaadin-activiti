@@ -1,6 +1,6 @@
 package org.vaadin.activiti.simpletravel.domain;
 
-import com.github.peholmst.stuff4vaadin.clone.CloneThis;
+//import com.github.peholmst.stuff4vaadin.clone.CloneThis;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,10 +20,10 @@ public class TravelInvoice extends AbstractEntity {
     protected TravelRequest request;
     @ElementCollection
     @Valid
-    @CloneThis(deepClone = true)
+    //@CloneThis(deepClone = true)
     protected Set<Expense> expenses = new HashSet<Expense>();
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @CloneThis
+    //@CloneThis
     protected TravelInvoiceDecision decision;
     protected boolean paid = false;
 

@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 @Embeddable
-public class Expense extends AbstractValueObject {
+public class Expense extends AbstractValueObject implements java.io.Serializable, Cloneable {
 
     @NotNull(message = "Please enter a description for your expense")
     protected String description;

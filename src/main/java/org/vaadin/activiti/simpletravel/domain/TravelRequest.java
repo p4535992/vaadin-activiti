@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 
 import org.vaadin.activiti.simpletravel.domain.validation.ReturnsAfterDeparture;
 
-import com.github.peholmst.stuff4vaadin.clone.CloneThis;
+//import com.github.peholmst.stuff4vaadin.clone.CloneThis;
 
 @Entity
 @ReturnsAfterDeparture(message = "The return date cannot be before the departure date")
@@ -47,7 +47,7 @@ public class TravelRequest extends AbstractEntity {
     @Size(min = 3, message = "Please enter a description of your trip")
     protected String description;
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
-    @CloneThis
+    //@CloneThis
     @Valid
     protected TravelRequestDecision decision;
     

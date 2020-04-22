@@ -16,6 +16,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 //import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -24,10 +25,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @ServletComponentScan
-@SpringBootApplication
+
 //@EnableSpringConfigured
 //@EnableTransactionManagement
 //@ImportResource({
@@ -35,7 +37,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //    //"classpath:application-context-ui.xml"
 //    "application-context.xml"
 //})
-public class SimpleTravelApplication  implements InitializingBean { //extends SpringBootServletInitializer {
+@SpringBootApplication(scanBasePackages = { "org.vaadin.activiti.simpletravel"} )
+//https://stackoverflow.com/questions/29221645/cant-autowire-repository-annotated-interface-in-spring-boot
+@EnableJpaRepositories(basePackages = { "org.vaadin.activiti.simpletravel"})
+@EntityScan(basePackages = { "org.vaadin.activiti.simpletravel"})
+public class SimpleTravelApplication  { //extends SpringBootServletInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(SimpleTravelApplication.class);
 
@@ -51,7 +57,7 @@ public class SimpleTravelApplication  implements InitializingBean { //extends Sp
 			//SpringApplication.run(MyApp.class, args);
 			SpringApplication app = new SpringApplication(SimpleTravelApplication.class);
 	        app.setBannerMode(Banner.Mode.OFF);
-	
+	        app.setLogStartupInfo(false);
 	        Environment env = app.run(args).getEnvironment();
 	        logApplicationStartup(env);
 		}catch(Throwable ex) {
@@ -149,12 +155,6 @@ public class SimpleTravelApplication  implements InitializingBean { //extends Sp
 			}
 
 		};
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

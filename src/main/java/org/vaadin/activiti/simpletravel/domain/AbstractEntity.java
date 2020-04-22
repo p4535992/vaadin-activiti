@@ -1,8 +1,8 @@
 package org.vaadin.activiti.simpletravel.domain;
 
-import com.github.peholmst.stuff4vaadin.clone.CloneUtil;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import com.github.peholmst.stuff4vaadin.clone.CloneUtil;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,12 +50,21 @@ public abstract class AbstractEntity implements java.io.Serializable, Cloneable 
         }
     }
 
+//    @Override
+//    public AbstractEntity clone() {
+//        try {
+//            return CloneUtil.deepClone((AbstractEntity) super.clone());
+//        } catch (CloneNotSupportedException ex) {
+//            throw new InternalError(ex.getMessage());
+//        }
+//    }
+
     @Override
     public AbstractEntity clone() {
-        try {
-            return CloneUtil.deepClone((AbstractEntity) super.clone());
-        } catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
+    	try {
+    		return (AbstractEntity) super.clone();
+    	} catch (CloneNotSupportedException ex) {
+    		throw new InternalError(ex.getMessage());
+    	}
     }
 }
